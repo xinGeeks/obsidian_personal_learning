@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(openspec list *)",
+      "Bash(openspec new *)",
+      "Bash(openspec status *)",
+      "Bash(openspec instructions *)",
+      "Bash(npm create *)",
+      "Bash(npm install *)",
+      "Bash(npx tsc *)",
+      "Bash(pip install *)",
+      "Bash(timeout 5 python -c \"from app.main import app; print\\('FastAPI app loaded OK'\\)\")",
+      "Bash(python -c \"from app.main import app; print\\('FastAPI app loaded OK'\\)\")",
+      "Bash(python -c \"from app.main import app; [print\\(r.path\\) for r in app.routes if '/api/' in r.path]\")",
+      "Bash(npx vite *)",
+      "Bash(cd \"G:/claudecode/obsidian_personal_learning_hub\")",
+      "Bash(mkdir -p openspec/specs/__TRACKED_VAR__)",
+      "Bash(cp openspec/changes/personal-learning-platform-mvp/specs/__TRACKED_VAR__/spec.md openspec/specs/__TRACKED_VAR__/spec.md)",
+      "Bash(echo 'Synced: __TRACKED_VAR__')",
+      "Bash(cp openspec/changes/phase4-external-resources/specs/__TRACKED_VAR__/spec.md openspec/specs/__TRACKED_VAR__/spec.md)"
+    ]
+  }
+}
