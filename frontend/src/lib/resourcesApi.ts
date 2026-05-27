@@ -1,9 +1,9 @@
 import type { ResourceItem, SearchResult } from './types'
 
-const BASE = '/api'
+import { API_BASE } from './base'
 
 async function req<T>(url: string, options?: RequestInit): Promise<T> {
-  const res = await fetch(`${BASE}${url}`, {
+  const res = await fetch(`${API_BASE}${url}`, {
     headers: { 'Content-Type': 'application/json' },
     ...options,
   })

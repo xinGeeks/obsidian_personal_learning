@@ -13,16 +13,16 @@ interface Settings {
   search_interval: number
 }
 
-const BASE = '/api'
+import { API_BASE } from '../lib/base'
 
 async function fetchSettings(): Promise<Settings> {
-  const res = await fetch(`${BASE}/settings`)
+  const res = await fetch(`${API_BASE}/settings`)
   if (!res.ok) throw new Error(res.statusText)
   return res.json()
 }
 
 async function saveSettings(updates: Record<string, unknown>): Promise<Settings> {
-  const res = await fetch(`${BASE}/settings`, {
+  const res = await fetch(`${API_BASE}/settings`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(updates),
