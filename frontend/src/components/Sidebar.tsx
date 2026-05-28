@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { useTheme } from '../lib/useTheme'
 
 interface NavItem {
   to: string
@@ -59,9 +58,8 @@ const bottomItems: NavItem[] = [
 const baseClasses =
   'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200'
 
-export function Sidebar() {
+export function Sidebar({ theme, onToggleTheme }: { theme: 'light' | 'dark'; onToggleTheme: () => void }) {
   const [mobileOpen, setMobileOpen] = useState(false)
-  const { theme, toggle } = useTheme()
 
   const navLinkClasses = ({ isActive }: { isActive: boolean }) =>
     [
@@ -94,7 +92,7 @@ export function Sidebar() {
 
       <div className="px-3 pb-1">
         <button
-          onClick={toggle}
+          onClick={onToggleTheme}
           className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium w-full text-text-secondary hover:text-text-primary hover:bg-bg-hover transition-all duration-200 border-l-2 border-transparent"
         >
           {theme === 'dark' ? (

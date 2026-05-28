@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 type Theme = 'light' | 'dark'
 
@@ -10,12 +10,31 @@ function getInitial(): Theme {
 
 export function useTheme() {
   const [theme, setTheme] = useState<Theme>(getInitial)
+  const switching = useRef(false)
 
   useEffect(() => {
-    const root = document.documentElement
-    root.classList.toggle('dark', theme === 'dark')
+    document.documentElement.classList.toggle('dark', theme === 'dark')
     localStorage.setItem('theme', theme)
   }, [theme])
 
-  return { theme, toggle: () => setTheme(t => t === 'dark' ? 'light' : 'dark') } as const
+  const toggle = useCallback(() => {
+    if (switching.current) return
+    switching.current = true
+
+    const next = theme === 'dark' ? 'light' : 'dark'
+
+    if ('startViewTransition' in document) {
+      const vt = document.startViewTransition(() => {
+        document.documentElement.classList.toggle('dark', next === 'dark')
+        localStorage.setItem('theme', next)
+        setTheme(next)
+      })
+      vt.finished.then(() => { switching.current = false })
+    } else {
+      setTheme(next)
+      switching.current = false
+    }
+  }, [theme])
+
+  return { theme, toggle } as const
 }
