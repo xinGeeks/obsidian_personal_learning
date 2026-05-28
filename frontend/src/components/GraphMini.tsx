@@ -139,7 +139,7 @@ export function GraphMini({ concepts, edges }: Props) {
       .style('transition', 'opacity 0.15s')
       .style('z-index', '100')
 
-    nodeG.on('mouseenter', (event, d) => {
+    nodeG.on('mouseenter', (_event, d) => {
       tooltip
         .style('opacity', '1')
         .html(`${d.name}<br><span style="color:#9ca3af">掌握度 ${Math.round(d.mastery * 100)}% · ${d.degree} 连接</span>`)

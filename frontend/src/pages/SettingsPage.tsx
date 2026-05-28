@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 
 interface Settings {
   vault_path: string
@@ -32,7 +31,6 @@ async function saveSettings(updates: Record<string, unknown>): Promise<Settings>
 }
 
 export function SettingsPage() {
-  const navigate = useNavigate()
   const [settings, setSettings] = useState<Settings | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -62,7 +60,6 @@ export function SettingsPage() {
     setError('')
     setMsg('')
 
-    // Parse domain weights from textarea
     const dw: Record<string, number> = {}
     for (const line of domainStr.split('\n')) {
       const [domain, weightStr] = line.split(':')
@@ -93,97 +90,93 @@ export function SettingsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full" />
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
 
   if (!settings) return null
 
+  const inputClasses = 'w-full px-3 py-2 bg-bg-base border border-border-card rounded-lg text-sm text-text-primary placeholder:text-text-secondary focus:border-accent/30 focus:ring-2 focus:ring-accent/20 outline-none'
+
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      <header className="bg-white border-b px-5 py-3 shrink-0 flex items-center gap-3">
-        <button onClick={() => navigate('/')} className="text-sm text-gray-400 hover:text-gray-600">← 仪表盘</button>
-        <h1 className="text-base font-semibold text-gray-900">设置</h1>
-        <div className="flex-1" />
+    <div className="space-y-5">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-xl font-semibold text-text-primary">设置</h1>
+        </div>
         <button onClick={handleSave} disabled={saving}
-          className="px-4 py-1.5 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700 disabled:opacity-50 transition-colors">
+          className="px-4 py-1.5 bg-accent text-white rounded-lg text-sm font-medium hover:bg-accent/90 disabled:opacity-50 transition-colors">
           {saving ? '保存中...' : '保存'}
         </button>
-      </header>
+      </div>
 
-      <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-6 overflow-y-auto space-y-6">
-        {error && <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">{error}</div>}
-        {msg && <div className="p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">{msg}</div>}
+      {error && <div className="p-4 bg-red/10 border border-red/20 rounded-xl text-red text-sm">{error}</div>}
+      {msg && <div className="p-4 bg-green/10 border border-green/20 rounded-xl text-green text-sm">{msg}</div>}
 
-        {/* Vault */}
-        <section className="bg-white rounded-xl border border-gray-200 p-5">
-          <h2 className="text-sm font-semibold text-gray-900 mb-3">Obsidian Vault</h2>
-          <label className="block text-xs text-gray-500 mb-1">Vault 路径</label>
-          <input type="text" value={settings.vault_path}
-            onChange={e => setSettings({ ...settings, vault_path: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:border-purple-300 outline-none" />
-          <p className="text-xs text-gray-400 mt-1">修改后需重启服务生效</p>
-        </section>
+      <section className="bg-bg-card border border-border-card rounded-xl p-5 hover:border-accent/15 transition-colors duration-200">
+        <h2 className="text-sm font-semibold text-text-primary mb-3">Obsidian Vault</h2>
+        <label className="block text-xs text-text-secondary mb-1">Vault 路径</label>
+        <input type="text" value={settings.vault_path}
+          onChange={e => setSettings({ ...settings, vault_path: e.target.value })}
+          className={inputClasses} />
+        <p className="text-xs text-text-secondary mt-1">修改后需重启服务生效</p>
+      </section>
 
-        {/* Deepseek */}
-        <section className="bg-white rounded-xl border border-gray-200 p-5">
-          <h2 className="text-sm font-semibold text-gray-900 mb-3">AI 配置</h2>
-          <div className="space-y-3">
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">API Key</label>
-              <input type="password" value={settings.deepseek_api_key}
-                onChange={e => setSettings({ ...settings, deepseek_api_key: e.target.value })}
-                placeholder={settings.deepseek_api_key_display || "sk-..."}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:border-purple-300 outline-none" />
-            </div>
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">Base URL</label>
-              <input type="text" value={settings.deepseek_base_url}
-                onChange={e => setSettings({ ...settings, deepseek_base_url: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:border-purple-300 outline-none" />
-            </div>
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">模型</label>
-              <input type="text" value={settings.deepseek_model}
-                onChange={e => setSettings({ ...settings, deepseek_model: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:border-purple-300 outline-none" />
-            </div>
-          </div>
-        </section>
-
-        {/* Search */}
-        <section className="bg-white rounded-xl border border-gray-200 p-5">
-          <h2 className="text-sm font-semibold text-gray-900 mb-3">外部资料搜索</h2>
-          <div className="space-y-3">
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">搜索间隔（秒）</label>
-              <input type="number" min={0} max={30} value={settings.search_interval}
-                onChange={e => setSettings({ ...settings, search_interval: parseFloat(e.target.value) || 0 })}
-                className="w-32 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:border-purple-300 outline-none" />
-            </div>
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">域名权重（域名: 权重，每行一个）</label>
-              <textarea value={domainStr} onChange={e => setDomainStr(e.target.value)}
-                rows={6}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm font-mono focus:border-purple-300 outline-none resize-none" />
-              <p className="text-xs text-gray-400 mt-1">格式: domain.com: 0.5，权重 0-1，越大越优先</p>
-            </div>
-          </div>
-        </section>
-
-        {/* Other */}
-        <section className="bg-white rounded-xl border border-gray-200 p-5">
-          <h2 className="text-sm font-semibold text-gray-900 mb-3">其他</h2>
+      <section className="bg-bg-card border border-border-card rounded-xl p-5 hover:border-accent/15 transition-colors duration-200">
+        <h2 className="text-sm font-semibold text-text-primary mb-3">AI 配置</h2>
+        <div className="space-y-3">
           <div>
-            <label className="block text-xs text-gray-500 mb-1">最大内容长度（字符）</label>
-            <input type="number" value={settings.max_content_length}
-              onChange={e => setSettings({ ...settings, max_content_length: parseInt(e.target.value) || 0 })}
-              className="w-40 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:border-purple-300 outline-none" />
+            <label className="block text-xs text-text-secondary mb-1">API Key</label>
+            <input type="password" value={settings.deepseek_api_key}
+              onChange={e => setSettings({ ...settings, deepseek_api_key: e.target.value })}
+              placeholder={settings.deepseek_api_key_display || "sk-..."}
+              className={inputClasses} />
           </div>
-        </section>
-      </main>
+          <div>
+            <label className="block text-xs text-text-secondary mb-1">Base URL</label>
+            <input type="text" value={settings.deepseek_base_url}
+              onChange={e => setSettings({ ...settings, deepseek_base_url: e.target.value })}
+              className={inputClasses} />
+          </div>
+          <div>
+            <label className="block text-xs text-text-secondary mb-1">模型</label>
+            <input type="text" value={settings.deepseek_model}
+              onChange={e => setSettings({ ...settings, deepseek_model: e.target.value })}
+              className={inputClasses} />
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-bg-card border border-border-card rounded-xl p-5 hover:border-accent/15 transition-colors duration-200">
+        <h2 className="text-sm font-semibold text-text-primary mb-3">外部资料搜索</h2>
+        <div className="space-y-3">
+          <div>
+            <label className="block text-xs text-text-secondary mb-1">搜索间隔（秒）</label>
+            <input type="number" min={0} max={30} value={settings.search_interval}
+              onChange={e => setSettings({ ...settings, search_interval: parseFloat(e.target.value) || 0 })}
+              className="w-32 px-3 py-2 bg-bg-base border border-border-card rounded-lg text-sm text-text-primary focus:border-accent/30 outline-none" />
+          </div>
+          <div>
+            <label className="block text-xs text-text-secondary mb-1">域名权重（域名: 权重，每行一个）</label>
+            <textarea value={domainStr} onChange={e => setDomainStr(e.target.value)}
+              rows={6}
+              className="w-full px-3 py-2 bg-bg-base border border-border-card rounded-lg text-sm font-mono text-text-primary focus:border-accent/30 focus:ring-2 focus:ring-accent/20 outline-none resize-none" />
+            <p className="text-xs text-text-secondary mt-1">格式: domain.com: 0.5，权重 0-1，越大越优先</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-bg-card border border-border-card rounded-xl p-5 hover:border-accent/15 transition-colors duration-200">
+        <h2 className="text-sm font-semibold text-text-primary mb-3">其他</h2>
+        <div>
+          <label className="block text-xs text-text-secondary mb-1">最大内容长度（字符）</label>
+          <input type="number" value={settings.max_content_length}
+            onChange={e => setSettings({ ...settings, max_content_length: parseInt(e.target.value) || 0 })}
+            className="w-40 px-3 py-2 bg-bg-base border border-border-card rounded-lg text-sm text-text-primary focus:border-accent/30 outline-none" />
+        </div>
+      </section>
     </div>
   )
 }

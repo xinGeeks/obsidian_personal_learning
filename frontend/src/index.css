@@ -1,6 +1,81 @@
 @import "tailwindcss";
 
+:root {
+  --tw-bg-base: #F8F9FA;
+  --tw-bg-card: #FFFFFF;
+  --tw-bg-hover: #F0F1F3;
+  --tw-accent: #4F5FE0;
+  --tw-accent-glow: rgba(79, 95, 224, 0.08);
+  --tw-green: #10B981;
+  --tw-red: #EF4444;
+  --tw-text-primary: #1A1D26;
+  --tw-text-secondary: #6B7280;
+  --tw-border-card: rgba(0, 0, 0, 0.08);
+  --tw-scrollbar-thumb: rgba(107, 114, 128, 0.25);
+  --tw-scrollbar-thumb-hover: rgba(107, 114, 128, 0.45);
+}
+
+.dark {
+  --tw-bg-base: #080B12;
+  --tw-bg-card: #131820;
+  --tw-bg-hover: #1A2030;
+  --tw-accent: #5B6EF5;
+  --tw-accent-glow: rgba(91, 110, 245, 0.12);
+  --tw-green: #34D399;
+  --tw-red: #F87171;
+  --tw-text-primary: #E8ECF1;
+  --tw-text-secondary: #8B949E;
+  --tw-border-card: rgba(255, 255, 255, 0.06);
+  --tw-scrollbar-thumb: rgba(139, 148, 158, 0.25);
+  --tw-scrollbar-thumb-hover: rgba(139, 148, 158, 0.45);
+}
+
+@theme {
+  --color-bg-base: var(--tw-bg-base);
+  --color-bg-card: var(--tw-bg-card);
+  --color-bg-hover: var(--tw-bg-hover);
+  --color-accent: var(--tw-accent);
+  --color-accent-glow: var(--tw-accent-glow);
+  --color-green: var(--tw-green);
+  --color-red: var(--tw-red);
+  --color-text-primary: var(--tw-text-primary);
+  --color-text-secondary: var(--tw-text-secondary);
+  --color-border-card: var(--tw-border-card);
+}
+
 body {
   margin: 0;
   min-height: 100vh;
+  background-color: var(--tw-bg-base);
+  color: var(--tw-text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--tw-scrollbar-thumb);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--tw-scrollbar-thumb-hover);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--tw-scrollbar-thumb) transparent;
 }

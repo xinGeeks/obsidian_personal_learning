@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { Evaluation, NoteInfo, Question, Quiz } from './types'
+import type { Evaluation, NoteInfo, Quiz } from './types'
 import { evaluateAnswer, fetchNotes, generateQuiz, saveSession } from './api'
 
 type Phase = 'select' | 'loading' | 'quiz' | 'evaluating' | 'review' | 'done'
@@ -18,6 +18,7 @@ interface AppState {
   startQuiz: () => Promise<void>
   submitAnswer: (answer: string) => Promise<void>
   nextQuestion: () => void
+  startReview: (notePath: string) => Promise<void>
 }
 
 export const useStore = create<AppState>((set, get) => ({
